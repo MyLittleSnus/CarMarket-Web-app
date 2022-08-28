@@ -1,0 +1,77 @@
+﻿@page
+@model IndexModel
+
+@{
+    ViewData["Title"] = "Home page";
+    ViewData["Username"] = Model.CurrentProfile.Username;
+    Layout = "Shared/_Layout.cshtml";
+}
+
+<div class="bg">
+    <div class="container mb-5">
+        <div class="text-center">
+            <h1 class="display-4 text-light py-5">Razor Carmarket</h1>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 md-12">
+                <div id="carouselControls rounded shadow shadow-lg" class="carousel slide mb-2" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="~/Images/bwm_slide.jpg" class="d-block w-100" alt="...">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="~/Images/mercedes_slide.jpg" class="d-block w-100" alt="...">
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselControls" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselControls" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+            <div class="col-lg-6 md-12">
+                <div class="container">
+                    <p class="mx-5 mt-3 mb-5" style="color: #F0FFFF;">
+                        What was beyond the bend in the stream was unknown. Both were curious, but only one was brave enough to want to explore. That was the problem. There was always one that let fear rule her life.
+                    </p>
+                </div>
+            </div>
+            <div class="container rounded mt-3 mb-5 mx-0">
+                <form method="post">
+                    <select class="form-select mt-3 mb-2" aria-label="select example 1" asp-for="SearchViewModel.CarType">
+                        <option selected value=-1>Оберіть тип автомобіля</option>
+                        <option value=1>Легкові</option>
+                        <option value=2>Позашляховики</option>
+                        <option value=3>Автобуси</option>
+                        <option value=-1>Всі</option>
+
+                    </select>
+                    <select class="form-select mb-2" aria-label="select example 2" asp-for="SearchViewModel.Country">
+                        <option selected value="ALL">Виберіть країну виробника</option>
+                        <option value="US">США</option>
+                        <option value="FC">Франция</option>
+                        <option value="DE">Германия</option>
+                        <option value="ALL">Все</option>
+                    </select>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="startPriceInput" class="form-label text-light">Початкова вартість ($)</label>
+                            <input type="number" class="form-control" id="startPriceInput" value="0" asp-for="SearchViewModel.StartCost">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="finalPriceInput" class="form-label text-light">Кінцева вартість ($)</label>
+                            <input type="number" class="form-control" value="10000" id="finalPriceInput" asp-for="SearchViewModel.FinalCost">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary mt-3 mb-3" type="submit">Шукати</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

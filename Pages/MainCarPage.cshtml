@@ -1,0 +1,224 @@
+﻿@page
+@model Razor_Test.Pages.MainCarPageModel
+
+@{
+    ViewData["Title"] = $"{Model.Offer.CarModel.Manufacturer}-{Model.Offer.CarModel.Model}-Offer";
+    ViewData["Username"] = Model.CurrentProfile.Username;
+}
+
+<div class="row justify-content-center">
+    <div class="col-8 text-center">
+        <div class="container">
+            <img class="img-fluid" src="@Model.Offer.CarModel.ImagePath" />
+        </div>
+        <div class="col-12">
+            <div class="container text-center">
+                <p>
+                    <h2 class="text-muted">@Model.Offer.CarModel.Manufacturer @Model.Offer.CarModel.Model</h2>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="card card-body text-center mx-3 mt-2 mb-2">
+            <h5>@Model.Offer.ShortDescription</h5>
+        </div>
+    </div>
+    <div class="col-12 text-center">
+        <button class="btn btn-outline-info mt-2 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapse" aria-expanded="true" aria-controls="collapse">Детальніше</button>
+    </div>
+    <div class="collapse" id="collapse">
+        <div class="col-12 justify-content-center">
+            <div class="container px-3 py-3 mt-2 mb-2">
+                <div class="card card-body">
+                    @Model.Offer.FullDescription
+                </div>
+            </div>
+        </div>
+        <div class="col-12 text-center">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Марка</th>
+                        <th scope="col">Модель</th>
+                        <th scope="col">Країна</th>
+                        <th scope="col">Ціна</th>
+                        <th scope="col">Рік</th>
+                        <th scope="col">Двигуни</th>
+                        <th scope="col">Світло</th>
+                        <th scope="col">Коробки</th>
+                        <th scope="col">Кількість місць</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.Offer.CarModel.Manufacturer</td>
+                        <td>@Model.Offer.CarModel.Model</td>
+                        <td>@Model.Offer.CarModel.Country</td>
+                        <td>@Model.Offer.CarModel.Cost</td>
+                        <td>@Model.Offer.CarModel.Year</td>
+                        <td>
+                            @{
+                                var enginesStr = "";
+                                foreach (var engine in Model.CompleteCarModel.EngineVolumes)
+                                    enginesStr += engine + " або ";
+                                <p>
+                                    @enginesStr[0..(enginesStr.Length - 5)]
+                                </p>
+                            }
+                        </td>
+                        <td>
+                            @{
+                                var lights = "";
+                                foreach (var light in Model.CompleteCarModel.LightTypes)
+                                    lights += light + " або ";
+                                <p>
+                                    @lights[0..(lights.Length - 5)]
+                                </p>
+                            }
+                        </td>
+                        <td>
+                            @{
+                                var gearBoxes = "";
+                                foreach (var gearBox in Model.CompleteCarModel.AvailableGearBoxes)
+                                    gearBoxes += gearBox + " або ";
+                                <p>
+                                    @gearBoxes[0..(gearBoxes.Length - 5)]
+                                </p>
+                            }
+                        </td>
+                        <td>Мін: @Model.CompleteCarModel.MinSeats | Макс: @Model.CompleteCarModel.MaxSeats</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-12 d-flex justify-content-center">
+        <div class="col-6 text-center">
+            <div class="container mt-3 mb-3">
+                <button class="btn btn-outline-primary w-100" type="button" data-bs-toggle="modal" data-bs-target="#orderIndividualCarModal">
+                    Оформити індивідуальний запит
+                </button>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="col-12 mt-2 mb-3 text-center">
+        <div class="container-fluid">
+            <p>
+                <h6>Comments Section</h6>
+                <h6 class="text-muted">No comments yet</h6>
+            </p>
+        </div>
+    </div>
+
+    <div class="modal fade" id="orderIndividualCarModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        @{
+            if (Model.CurrentProfile.Username == "Account")
+            {
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <h4 style="color: red">
+                                You are not authorized!
+                            </h4>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="container text-center">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Accept</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="orderModalLabel">Зробіть своє замовлення</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="card card-body">
+                                <form method="post" id="orderForm">
+                                    <label class="form-label" for="manufacturer">Виробник</label>
+                                    <input type="text" class="form-control" id="manufacturer" readonly value="@Model.Offer.CarModel.Manufacturer" asp-for="NewOrder.CarManufacturer">
+                                    <label class="form-label mt-2" for="model">Модель</label>
+                                    <input type="text" class="form-control" id="model" readonly value="@Model.Offer.CarModel.Model" asp-for="NewOrder.CarModel">
+                                    <label class="form-label mt-2" for="seatsChoose">Оберіть кількість місць</label>
+                                    <label class="form-label mt-2" for="yearinput">Рік</label>
+                                    <input type="number" class="form-control" id="yearinput" readonly value="@Model.Offer.CarModel.Year" asp-for="NewOrder.Year" />
+                                    <div id="seatsChoose">
+                                        <div class="btn-group" role="group" aria-label="radio toggle button group for seats" id="seats">
+                                            <input type="radio" class="btn-check" id="minSeats" value="@Model.CompleteCarModel.MinSeats" autocomplete="off" asp-for="@Model.NewOrder.SeatNumber">
+                                            <label class="btn btn-outline-secondary" for="minSeats">@Model.CompleteCarModel.MinSeats</label>
+                                            <input type="radio" class="btn-check" value="@Model.CompleteCarModel.MaxSeats" id="maxSeats" autocomplete="off" asp-for="@Model.NewOrder.SeatNumber">
+                                            <label class="btn btn-outline-secondary" for="maxSeats">@Model.CompleteCarModel.MaxSeats</label>
+                                        </div>
+                                    </div>
+
+                                    <label class="form-label mt-2" for="engineVolumeCheckBoxes">Оберіть двигун</label>
+                                    <div id="engineVolumeCheckBoxes">
+                                        @{
+                                            var engineIndex = 0;
+                                            foreach (var engineVolume in Model.CompleteCarModel.EngineVolumes)
+                                            {
+                                                <input class="form-check-input" type="radio" value="@engineVolume" id="engineCheck @engineIndex" asp-for="NewOrder.EngineVolume" />
+                                                <label class="form-check-label" for="engineCheck @engineIndex">
+                                                    @engineVolume
+                                                </label>
+                                                engineIndex++;
+                                            }
+                                        }
+                                    </div>
+                                    <label class="form-label mt-2" for="lightCheckBoxes">Оберіть світло</label>
+                                    <div id="lightCheckBoxes">
+                                        @{
+                                            var lightIndex = 0;
+                                            foreach (var light in Model.CompleteCarModel.LightTypes)
+                                            {
+                                                <input class="form-check-input" type="radio" value="@light" id="lightCheck @lightIndex" asp-for="NewOrder.Light" />
+                                                <label class="form-check-label" for="lightCheck @lightIndex">
+                                                    @light
+                                                </label>
+                                                lightIndex++;
+                                            }
+                                        }
+                                    </div>
+                                    <div id="gearBoxes">
+                                        @{
+                                            var gearboxIndex = 0;
+                                            foreach (var gearbox in Model.CompleteCarModel.AvailableGearBoxes)
+                                            {
+                                                <input class="form-check-input" type="radio" value="@gearbox" id="lightCheck @lightIndex" asp-for="NewOrder.GearBox" />
+                                                <label class="form-check-label" for="lightCheck @gearboxIndex">
+                                                    @gearbox
+                                                </label>
+                                                gearboxIndex++;
+                                            }
+                                        }
+                                    </div>
+                                    <label class="form-label mt-2" for="paymentSelect">Спосіб оплати</label>
+                                    <select class="form-select" aria-label="paymentSelect" id="paymentSelect" asp-for="NewOrder.PaymentType">
+                                        <option value="Credit">Кредит</option>
+                                        <option value="AllCashValue">Сплата готівкою</option>
+                                        <option value="AllCardValue">Сплата карткою</option>
+                                        <option value="HalfCardHalfCash">Сплата карткою та готівкою</option>
+                                    </select>
+                                    <label for="exampleColorInput" class="form-label">Оберіть колір авто</label>
+                                    <input type="color" class="form-control form-control-color" id="exampleColorInput" value="#563d7c" title="Колір" asp-for="NewOrder.Color">
+                                </form>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <div class="col-6">
+                                <button type="submit" form="orderForm" asp-page="MainCarPage" asp-page-handler="CreateOrder" asp-route-id="@Model.Offer.Id" class="btn btn-primary w-100">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

@@ -1,0 +1,56 @@
+﻿@page
+@model Razor_Test.Pages.AuthorizationModel
+@{
+    ViewData["Title"] = "Authorization";
+}
+<video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
+    <source src="~/Videos/formVideo.mp4" type="video/mp4" />
+</video>
+<div class="row justify-content-center">
+    <div class="col-md-4 sm-6">
+        <div class="container mt-5">
+            <div class="card bg-dark rounded">
+                <div class="card-title">
+                    <div class="d-flex justify-content-center">
+                        <div class="col-6">
+                            <div class="container-fluid">
+                                <img class="img-fluid w-15" src="~/Images/logos/mainLogo.png" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="col-12 text-center align-items-center">
+                            <div class="h4 text-muted">
+                                Реєстрація
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form class="mx-3" method="post">
+                        <div class="col-12 mb-2">
+                            <label for="usernameField" class="form-label text-light">Ім'я користувача</label>
+                            <input type="text" id="usernameField" class="form-control" asp-for="@Model.Username"/>
+                            <span asp-validation-for="@Model.Username" class="text-danger"></span>
+                        </div>
+                        <div class="col-12 mb-2">
+                            <label for="emailField" class="form-label text-light">Почта</label>
+                            <input type="email" id="emailField" class="form-control" placeholder="example@gmail.com" asp-for="Email" />
+                            <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                        </div>
+                        <div class="col-12 mb-2">
+                            <label for="passwordField" class="form-label text-light">Пароль</label>
+                            <input id="passwordField" type="password" class="form-control" asp-for="Password" />
+                            <span asp-validation-for="@Model.Password" class="text-danger"></span>
+                        </div>
+                        <div class="col-12 mb-2">
+                            <div class="text-center">
+                                <button class="btn btn-outline-light w-100 mt-2">Зареєструватися</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+﻿@page
+@model Razor_Test.Pages.ErrorDataPageModel
+
+<div class="container-fluid mt-3">
+    <div class="card border border-danger">
+        <div class="card-body justify-content-center">
+            <h5 class="card-title text-danger">
+                Помилка створення
+            </h5>
+            <p class="card-text">
+                Створення скасовано через такі помилки: 
+            </p>
+            @{
+                foreach (var prop in Model.Errors)
+                {
+                    <div data-bs-spy="scroll" data-bs-target="#errorsList" data-bs-offset="0" data-bs-smooth-scroll="true" class="scrollspy-example" tabindex="0">
+                        <ul class="list-group" id="errorsList">
+                            <li class="list-group-item">
+                                <div class="text-danger">
+                                    @prop
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                }
+            }
+        </div>
+        <div class="card-footer">
+            <a class="btn btn-primary" asp-page="AdminPage">Зрозуміло</a>
+        </div>
+    </div>
+</div>

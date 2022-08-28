@@ -1,0 +1,126 @@
+﻿@page
+@model Razor_Test.Pages.AdminUpdateOfferPageModel
+@{
+}
+<div class="container-fluid mt-3 mb-3 w-45">
+    <div class="d-flex justify-content-center">
+        <div class="card w-50">
+            <div class="card-body">
+                <h5 class="card-title">
+                    Оновлення оголошення
+                </h5>
+                <form method="post" id="submitUpdateForm" enctype="multipart/form-data">
+                    <div class="container-fluid mt-2 mb-2">
+                        <img class="img img-fluid" src="@Model.Offer.CarModel.ImagePath" asp-append-version="true" />
+                    </div>
+                    <label for="manufacturer" class="form-label">Виробник</label>
+                    <input type="text" class="form-control" asp-for="@Model.Offer.CarModel.Manufacturer" id="manufacturer">
+                    <label for="model" class="form-label">Модель</label>
+                    <input type="text" class="form-control" asp-for="@Model.Offer.CarModel.Model" id="model">
+                    <label class="form-label">Рік</label>
+                    <input class="form-control" id="yearInput" type="number" asp-for="@Model.Offer.CarModel.Year" />
+                    <div class="mt-2">
+                        <label for="shortDescTextArea" class="form-label">Короткий опис</label>
+                        <textarea class="form-control" id="shortDescTextArea" rows="3" asp-for="@Model.Offer.ShortDescription"></textarea>
+                    </div>
+                    <div class="mt-2">
+                        <label for="detailedInfoTextArea" class="form-label">Детальний опис</label>
+                        <textarea class="form-control" id="detailedInfoTextArea" rows="5" asp-for="@Model.Offer.FullDescription"></textarea>
+                    </div>
+                    <label for="countrySelect" class="form-label">Країна виробник</label>
+                    <select class="form-select" aria-label="countrySelect" asp-for="@Model.Offer.CarModel.Country">
+                        <option value="UA" selected>Україна</option>
+                        <option value="FC">Франція</option>
+                        <option value="US">США</option>
+                        <option value="DE">Німеччина</option>
+                    </select>
+                    <div class="col-12">
+                        <label class="form-label" for="engineSelect">Оберіть типи двигунів</label>
+                        <div class="btn-group" role="group" id="engineSelect" aria-label="engine checkbox toggle button group">
+                            <input type="checkbox" class="btn-check" id="v2" autocomplete="off" asp-for="@Model.HasV2" name="engines" value="V2">
+                            <label class="btn btn-outline-primary" for="v2">V2</label>
+
+                            <input type="checkbox" class="btn-check" id="v4" autocomplete="off" name="engines" asp-for="@Model.HasV4" value="V4">
+                            <label class="btn btn-outline-primary" for="v4">V4</label>
+
+                            <input type="checkbox" class="btn-check" id="V6" autocomplete="off" name="engines" asp-for="@Model.HasV6" value="V6">
+                            <label class="btn btn-outline-primary" for="V6">V6</label>
+
+                            <input type="checkbox" class="btn-check" id="V8" autocomplete="off" name="engines" asp-for="@Model.HasV8" value="V8">
+                            <label class="btn btn-outline-primary" for="V8">V8</label>
+
+                            <input type="checkbox" class="btn-check" id="V10" autocomplete="off" name="engines" asp-for="@Model.HasV10" value="V10">
+                            <label class="btn btn-outline-primary" for="V10">V10</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="lightSelect">Оберіть типи фар</label>
+                        <div class="btn-group" role="group" aria-label="light checkbox toggle button group" id="lightSelect">
+                            <input type="checkbox" class="btn-check" id="LED" autocomplete="off" name="lights" asp-for="@Model.HasLED" value="LED">
+                            <label class="btn btn-outline-primary" for="LED">LED</label>
+
+                            <input type="checkbox" class="btn-check" id="Halogen" autocomplete="off" name="lights" asp-for="HasHalogen" value="Halogen">
+                            <label class="btn btn-outline-primary" for="Halogen">Halogen</label>
+
+                            <input type="checkbox" class="btn-check" id="Xenon" autocomplete="off" name="lights" asp-for="@Model.HasXenon" value="Xenon">
+                            <label class="btn btn-outline-primary" for="Xenon">Xenon</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Оберіть коробку</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="AUTO" id="flexCheckAutoGear" asp-for="@Model.HasAuto" name="gearBoxes">
+                            <label class="form-check-label" for="flexCheckAutoGear">
+                                Автоматична
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="MANUAL" id="flexCheckManualGear" asp-for="@Model.HasManual" name="gearBoxes">
+                            <label class="form-check-label" for="flexCheckManualGear">
+                                Ручна
+                            </label>
+                        </div>
+                    </div>
+                    <label class="form-label" for="costInput">Ціна</label>
+                    <input class="form-control" type="number" id="costInput" placeholder="$$$" asp-for="Offer.CarModel.Cost" />
+                    <label class="form-label">Мінімальна кількість місць</label>
+                    <select class="form-select" aria-label="seatSelect" asp-for="@Model.CompleteCarModel.MinSeats" name="minSeat">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                    </select>
+                    <label class="form-label">Максимальна кількість місць</label>
+                    <select class="form-select" asp-for="@Model.CompleteCarModel.MaxSeats" aria-label="seatSelect" name="maxSeat">
+                        <option value="1" selected>1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                    </select>
+                    <label for="formFile">Завантажте фото</label>
+                    <input class="form-control" type="file" id="formFile" asp-for="@Model.OfferImage">
+                </form>
+                <div class="card-footer">
+                    <div class="mt-2 mb-2">
+                        <div class="d-flex flex-row justify-content-center">
+                            <div class="col-5 mx-1">
+                                <button class="btn btn-primary w-100" type="submit" form="submitUpdateForm" id="confirmAddMessage" asp-page="AdminUpdateOfferPage" asp-page-handler="UpdateOffer" asp-route-id="@Model.Offer.Id" asp-route-carId ="@Model.Offer.CarModel.Id">Оновити</button>
+                            </div>
+                            <div class="col-5 mx-1">
+                                <a class="btn btn-dark w-100" aria-label="Close" asp-page="AdminPage">Повернутися</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

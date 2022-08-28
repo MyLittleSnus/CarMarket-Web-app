@@ -1,0 +1,48 @@
+﻿html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+viewPhotoRestrictions {
+    max-height: 400px;
+    max-width: 600px;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.myLighter {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 400;
+    color: #CD5C5C;
+    text-shadow: #000000 1px 1px 3px;
+}
+
+
+.bg {
+    background-image: url('https://i.pinimg.com/originals/27/1b/17/271b17fc7447e6c2b65db1e2aba97cd8.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+video {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}

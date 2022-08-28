@@ -1,0 +1,38 @@
+﻿@page
+@model Razor_Test.Pages.AdminUserInfoModel
+@{
+    ViewData["Username"] = Model.CurrentProfile.Username;
+    Layout = "Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="d-flex align-items-center justify-content-center">
+        <div class="card">
+            <div class="card-body">
+                <form>
+                    <label class="form-label">Ідентифікатор</label>
+                    <input class="form-control" type="number" readonly asp-for="@Model.UserProfile.Id" />
+
+                    <label class="form-label">Імя користувача</label>
+                    <input class="form-control" type="text" readonly asp-for="@Model.UserProfile.Username" />
+
+                    <label class="form-label">Пошта</label>
+                    <input class="form-control" type="text" readonly asp-for="@Model.UserProfile.Email" />
+
+                    <label class="form-label">Аккаунт зареэстрованний</label>
+                    <input class="form-control" type="datetime" readonly asp-for="@Model.UserProfile.CreatedAt" />
+
+                    <label class="form-label">Є адміністратором?</label>
+                    <input class="form-check-input mt-1" type="checkbox" asp-for="@Model.UserProfile.IsAdmin" disabled aria-label="isAdminCheckbox">
+                </form>
+            </div>
+            <div class="card-footer">
+                <div class="row justify-content-center">
+                    <div class="col-4">
+                        <a class="btn btn-dark " asp-page="AdminPage">Повернутися</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,237 @@
+﻿@page
+@model Razor_Test.Pages.AdminPageModel
+@{
+    ViewData["Username"] = Model.CurrentProfile.Username;
+    Layout = "Shared/_Layout.cshtml";
+}
+
+<div class="row flex-column justify-content-center align-items-center mb-3">
+    <div class="col-md-4 col-8 mt-3">
+        <a class="btn btn-warning justify-content-center w-100" data-bs-toggle="modal" data-bs-target="#addNewOffer">
+            <i class="bi bi-plus-circle"></i>
+            Додати нове оголошення
+        </a>
+    </div>
+    <div class="col-md-4 col-8 justify-content-center">
+        <a class="btn btn-warning w-100" data-bs-toggle="collapse" data-bs-target="#buyersCollapse" aria-expanded="false" aria-controls="buyersCollapse">
+            <i class="bi bi-people-fill"></i>
+            База покупців
+        </a>
+    </div>
+    <div class="col-md-4 col-8 justify-content-center">
+        <a class="btn btn-warning w-100" data-bs-toggle="collapse" data-bs-target="#allUsersCollapse" aria-expanded="false" aria-controls="allUsersCollapse">
+            <i class="bi bi-people-fill"></i>
+            База користувачів
+        </a>
+    </div>
+    <div class="col-md-4 col-8 justify-content-center" data-bs-toggle="collapse" data-bs-target="#ordersCollapse" aria-expanded="false" aria-controls="ordersCollapse">
+        <a class="btn btn-warning w-100">
+            <i class="bi bi-list-ul"></i>
+            База замовлень
+        </a>
+    </div>
+</div>
+
+<div class="collapse" id="ordersCollapse">
+    <div class="container mt-3 mb-3">
+        <div class="list-group">
+            @{
+                foreach (var order in Model.AllOrders)
+                {
+                    var color = "";
+                    if (order.IsApproved == false)
+                        color = "red";
+                    else color = "green";
+                    <a type="button" asp-page="AdminOrderPage" asp-route-id="@order.Id" class="list-group-item list-group-item-action" style="color: @color">@order.Id @order.Code @order.Customer.Username @order.CreatedAt</a>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<div class="collapse" id="buyersCollapse">
+    <div class="container mt-3 mb-3">
+        <div class="list-group">
+            @{
+                foreach (var buyer in Model.Buyers)
+                {
+                    <a type="button" asp-page="AdminUserInfo" asp-route-id="@buyer.Id" class="list-group-item list-group-item-action">@buyer.Username</a>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<div class="collapse" id="allUsersCollapse">
+    <div class="container mt-3 mb-3">
+        <div class="list-group">
+            @{
+                foreach (var user in Model.AllUsers)
+                {
+                    <a type="button" asp-page="AdminUserInfo" asp-route-id="@user.Id" class="list-group-item list-group-item-action">@user.Username</a>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@{
+    if (Model.Offers != null)
+    {
+        <div class="list-group">
+            @foreach (var offer in Model.Offers)
+            {
+                <div class="container mb-2 border">
+                    <div class="row">
+                        <div class="col-md-4 col-12">
+                            <div class="d-flex justify-content-start align-items-center">
+                                <p class="md-text-center">@offer.Id  @offer.CarModel.Manufacturer | @offer.CarModel.Model</p>
+                            </div>
+                        </div>
+                        <div class="col-md-8 col-12">
+                            <div class="row d-flex justify-content-end align-items-center md-justify-content-center">
+                                <div class="col-md-2 col-12 mx-2">
+                                    <a class="btn btn-danger w-100" asp-route-id="@offer.Id" id="confirmDeleteToastBtn" asp-page-handler="DeleteOffer">Видалити</a>
+                                </div>
+                                <div class="col-md-2 col-12 mx-2">
+                                    <a class="btn btn-info w-100" asp-page="MainCarPage" asp-route-id="@offer.Id">Переглянути</a>
+                                </div>
+                                <div class="col-md-2 col-12 mx-2">
+                                    <a class="btn btn-secondary w-100" asp-page="AdminUpdateOfferPage" asp-route-id="@offer.Id">Оновити</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+}
+
+<div class="modal fade" id="addNewOffer" tabindex="-1" aria-labelledby="newOfferLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addNewOfferLabel">Нове Оголошення</h5>
+            </div>
+            <div class="modal-body">
+                <div class="card card-body">
+                    <form method="post" id="submitForm" enctype="multipart/form-data">
+                        <label for="manufacturer" class="form-label">Виробник</label>
+                        <input type="text" class="form-control" asp-for="@Model.NewEntity.Offer.CarModel.Manufacturer" id="manufacturer">
+                        <label for="model" class="form-label">Модель</label>
+                        <input type="text" class="form-control" asp-for="@Model.NewEntity.Offer.CarModel.Model" id="model">
+                        <label class="form-label">Рік</label>
+                        <input class="form-control" id="yearInput" type="number" asp-for="@Model.NewEntity.Offer.CarModel.Year" />
+                        <div class="mt-2">
+                            <label for="shortDescTextArea" class="form-label">Короткий опис</label>
+                            <textarea class="form-control" id="shortDescTextArea" rows="3" asp-for="@Model.NewEntity.Offer.ShortDescription"></textarea>
+                        </div>
+                        <div class="mt-2">
+                            <label for="detailedInfoTextArea" class="form-label">Детальний опис</label>
+                            <textarea class="form-control" id="detailedInfoTextArea" rows="5" asp-for="@Model.NewEntity.Offer.FullDescription"></textarea>
+                        </div>
+                        <label for="countrySelect" class="form-label">Країна виробник</label>
+                        <select class="form-select" aria-label="countrySelect" asp-for="@Model.NewEntity.Offer.CarModel.Country">
+                            <option value="UA" selected>Україна</option>
+                            <option value="FC">Франція</option>
+                            <option value="US">США</option>
+                            <option value="DE">Німеччина</option>
+                        </select>
+                        <label class="form-label" for="engineSelect">Оберіть типи двигунів</label>
+                        <div class="btn-group" role="group" id="engineSelect" aria-label="engine checkbox toggle button group">
+                            <input type="checkbox" class="btn-check" id="v2" autocomplete="off" name="engines" value="V2">
+                            <label class="btn btn-outline-primary" for="v2">V2</label>
+
+                            <input type="checkbox" class="btn-check" id="v4" autocomplete="off" name="engines" value="V4">
+                            <label class="btn btn-outline-primary" for="v4">V4</label>
+
+                            <input type="checkbox" class="btn-check" id="V6" autocomplete="off" name="engines" value="V6">
+                            <label class="btn btn-outline-primary" for="V6">V6</label>
+
+                            <input type="checkbox" class="btn-check" id="V8" autocomplete="off" name="engines" value="V8">
+                            <label class="btn btn-outline-primary" for="V8">V8</label>
+
+                            <input type="checkbox" class="btn-check" id="V10" autocomplete="off" name="engines" value="V10">
+                            <label class="btn btn-outline-primary" for="V10">V10</label>
+                        </div>
+                        <label class="form-label" for="lightSelect">Оберіть типи фар</label>
+                        <div class="btn-group" role="group" aria-label="light checkbox toggle button group" id="lightSelect">
+                            <input type="checkbox" class="btn-check" id="LED" autocomplete="off" name="lights" value="LED">
+                            <label class="btn btn-outline-primary" for="LED">LED</label>
+
+                            <input type="checkbox" class="btn-check" id="Halogen" autocomplete="off" name="lights" value="Halogen">
+                            <label class="btn btn-outline-primary" for="Halogen">Halogen</label>
+
+                            <input type="checkbox" class="btn-check" id="Xenon" autocomplete="off" name="lights" value="Xenon">
+                            <label class="btn btn-outline-primary" for="Xenon">Xenon</label>
+                        </div>
+                        <label class="form-label">Оберіть коробку</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="AUTO" id="flexCheckAutoGear" name="gearBoxes">
+                            <label class="form-check-label" for="flexCheckAutoGear">
+                                Автоматична
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="MANUAL" id="flexCheckManualGear" name="gearBoxes">
+                            <label class="form-check-label" for="flexCheckManualGear">
+                                Ручна
+                            </label>
+                        </div>
+                        <label class="form-label" for="costInput">Ціна</label>
+                        <input class="form-control" type="number" id="costInput" placeholder="$$$" asp-for="@Model.NewEntity.Offer.CarModel.Cost" />
+                        <label class="form-label">Мінімальна кількість місць</label>
+                        <select class="form-select" aria-label="seatSelect" name="minSeat">
+                            <option value="1" selected>1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                        </select>
+                        <label class="form-label">Максимальна кількість місць</label>
+                        <select class="form-select" aria-label="seatSelect" name="maxSeat">
+                            <option value="1" selected>1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                        </select>
+                        <label for="formFile">Завантажте фото</label>
+                        <input class="form-control" type="file" id="formFile" asp-for="@Model.NewEntity.File">
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-12">
+                    <button class="btn btn-primary w-100" type="submit" form="submitForm" id="confirmAddMessage" asp-page="AdminPage" asp-page-handler="SaveOffer">Створити</button>
+                </div>
+                <div class="col-12">
+                    <button type="button" class="btn btn-danger w-100" data-bs-dismiss="modal" aria-label="Close">Скасувати</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="confirmAddMessage" class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+        <div class="toast-body">
+            You have successfuly added a new offer
+        </div>
+    </div>
+</div>
+
+<div id="confirmDeleteMessage" class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+        <div class="toast-body">
+            You have successfuly deleted an offer
+        </div>
+    </div>
+</div>

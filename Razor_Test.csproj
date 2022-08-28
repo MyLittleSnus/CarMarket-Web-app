@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\Images\" />
+    <Content Remove="wwwroot\Images\countries\" />
+    <Content Remove="wwwroot\Images\New Folder\" />
+    <Content Remove="wwwroot\Videos\" />
+    <Content Remove="wwwroot\ProfileResources\" />
+    <Content Remove="wwwroot\ProfileResources\Pictures\" />
+    <Content Remove="wwwroot\OfferResources\" />
+    <Content Remove="wwwroot\CarResources\" />
+    <Content Remove="wwwroot\CarResources\Pictures\" />
+    <Content Remove="wwwroot\OfferResources\Pictures\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\" />
+    <Folder Include="Models\" />
+    <Folder Include="AdditionalEntities\" />
+    <Folder Include="wwwroot\Images\countries\" />
+    <Folder Include="wwwroot\Images\logos\" />
+    <Folder Include="wwwroot\Videos\" />
+    <Folder Include="wwwroot\ProfileResources\" />
+    <Folder Include="wwwroot\ProfileResources\Pictures\" />
+    <Folder Include="wwwroot\OfferResources\" />
+    <Folder Include="wwwroot\CarResources\" />
+    <Folder Include="wwwroot\CarResources\Pictures\" />
+    <Folder Include="wwwroot\OfferResources\Pictures\" />
+    <Folder Include="OfferCarModel\" />
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Models\" />
+    <None Remove="Entities\" />
+    <None Remove="Microsoft.EntityFrameworkCore.Sqlite.Core" />
+    <None Remove="Microsoft.EntityFrameworkCore.Sqlite" />
+    <None Remove="OfferCarModel\" />
+    <None Remove="Newtonsoft.Json" />
+    <None Remove="Extensions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+</Project>

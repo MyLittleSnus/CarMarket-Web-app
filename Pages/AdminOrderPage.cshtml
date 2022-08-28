@@ -1,0 +1,240 @@
+﻿@page
+@model Razor_Test.Pages.AdminOrderPageModel
+@{
+    ViewData["Username"] = Model.CurrentProfile.Username;
+    Layout = "Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="card w-50 mt-2 mb-2">
+            <div class="card-body">
+                <div class="form" method="post">
+                    <label class="form-label" for="orderId">Ідетіфікатор</label>
+                    <input class="form-control mt-2" id="orderId" readonly asp-for="@Model.Order.Id" />
+                    <label class="form-label mt-2" for="customerUsername">Замовник</label>
+                    <input class="form-control" id="customerUsername" readonly asp-for="@Model.Order.Customer.Username" />
+                    <label class="form-label mt-2" for="orderCode">Код замовлення</label>
+                    <input class="form-control" id="orderCode" readonly asp-for="@Model.Order.Code" />
+                    <label class="form-label mt-2" for="CarManufacturer">Виробник авто</label>
+                    <input class="form-control" id="CarManufacturer" readonly asp-for="@Model.Order.CarManufacturer" />
+                    <label class="form-label mt-2" for="CarModel">Модель авто</label>
+                    <input class="form-control" id="CarModel" readonly asp-for="@Model.Order.CarModel" />
+                    <label class="form-label" for="yearInput">Рік</label>
+                    <input class="form-control mt-2" id="yearInput" readonly asp-for="@Model.Order.Year" />
+                    <label class="form-label mt-2" for="SeatNumber">Кількість місць</label>
+                    <input class="form-control" id="SeatNumber" readonly asp-for="@Model.Order.SeatNumber" />
+                    <label class="form-label mt-2" for="EngineVolume">Об'єм двигуна</label>
+                    <input class="form-control" id="EngineVolume" readonly asp-for="@Model.Order.EngineVolume" />
+                    <label class="form-label mt-2" for="Light">Тип світла</label>
+                    <input class="form-control" id="Light" readonly asp-for="@Model.Order.Light" />
+                    <label class="form-label mt-2" for="createdAt">Створено</label>
+                    <input class="form-control" type="datetime" id="createdAt" readonly asp-for="@Model.Order.CreatedAt" />
+                    @{
+                        var textToDisplay = "";
+                        switch (Model.Order.PaymentType)
+                        {
+                            case "Credit":
+                                textToDisplay = "Кредит";
+                                break;
+                            case "AllCashValue":
+                                textToDisplay = "Готівка";
+                                break;
+                            case "PaymentInInstallments":
+                                textToDisplay = "Розсрочка";
+                                break;
+                            case "HalfCardHalfCash":
+                                textToDisplay = "Карта та готівка";
+                                break;
+                        }
+                        <label class="form-label" for="Payment">Спосіб оплати</label>
+                        <input class="form-control" id="Payment" readonly value="@textToDisplay" />
+                    }
+                    <label class="form-label" for="Color">Колір</label>
+                    <input type="color" disabled class="form-control form-control-color" id="Color" readonly asp-for="@Model.Order.Color" />
+                </div>
+            </div>
+            <div class="card-footer">
+                <form method="post">
+                    <div class="d-flex flex-row justify-content-center">
+                        @{
+                            if (Model.Order.IsApproved)
+                            {
+                                <a asp-page="AdminPage" class="btn btn-outline-dark mx-3 w-100">Повернутися</a>
+                            }
+                            else
+                            {  
+                                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#updateOrder">Оновити дані</button>
+                                <button type="submit"
+                                        asp-page="AdminOrderPage"
+                                        asp-route-Id="@Model.Order.Id"
+                                        asp-page-handler="ApproveOrder"
+                                        class="btn btn-outline-success">Підтвердити замовлення</button>
+                                <button asp-page="AdminOrderPage" asp-page-handler="DeleteOrder" asp-route-Id="@Model.Order.Id" class="btn btn-outline-danger">Скасувати замовлення</button>
+                                <a asp-page="AdminPage" class="btn btn-outline-dark">Повернутися</a>
+                            }
+                        }
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateOrder" tabindex="-1" aria-labelledby="updateOfferLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="Update Offer">Редагування замовлення</h5>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body">
+                    <div class="card card-body">
+                        <form method="post" id="updateOrderForm">
+                            <label class="form-label" for="id">Ідентифікатор</label>
+                            <input class="form-control" id="id" readonly value="@Model.Order.Id" asp-for="@Model.Order.Id" />
+                            <label class="form-label" for="createdAtId">Дата замовлення</label>
+                            <input class="form-control" id="createdAtId" type="datetime" readonly value="@Model.Order.CreatedAt" asp-for="@Model.Order.CreatedAt" />
+                            <label class="form-label" for="manufacturer">Виробник</label>
+                            <input type="text" class="form-control" id="manufacturer" readonly value="@Model.Order.CarManufacturer" asp-for="@Model.Order.CarManufacturer">
+                            <label class="form-label mt-2" for="model">Модель</label>
+                            <input type="text" class="form-control" id="model" readonly value="@Model.Order.CarModel" asp-for="@Model.Order.CarModel">
+                            <label class="form-label mt-2" for="yearInput">Рік</label>
+                            <input class="form-control" type="datetime" readonly id="yearInput" value="@Model.Order.Year" asp-for="@Model.Order.Year" />
+                            <label class="form-label">Код замовлення (редагування заборонено)</label>
+                            <input class="form-control" type="number" readonly value="@Model.Order.Code" asp-for="@Model.Order.Code" />
+                            <label class="form-label mt-2" for="seatsChoose">Кількість місць</label>
+
+                            <div id="seatsChoose">
+                                <div class="btn-group" role="group" aria-label="radio toggle button group for seats" id="seats">
+                                    <input type="radio" class="btn-check" id="minSeats" value="@Model.CompleteCarModel.MinSeats" asp-for="@Model.Order.SeatNumber">
+                                    <span asp-validation-for="@Model.Order.SeatNumber" class="text-danger"></span>
+                                    <label class="btn btn-outline-secondary" for="minSeats">@Model.CompleteCarModel.MinSeats</label>
+                                    <input type="radio" class="btn-check" value="@Model.CompleteCarModel.MaxSeats" id="maxSeats" asp-for="@Model.Order.SeatNumber">
+                                    <span asp-validation-for="@Model.Order.SeatNumber" class="text-danger"></span>
+                                    <label class="btn btn-outline-secondary" for="maxSeats">@Model.CompleteCarModel.MaxSeats</label>
+                                </div>
+                            </div>
+
+                            <label class="form-label mt-2" for="engineVolumeCheckBoxes">Двигун</label>
+                            <div id="engineVolumeCheckBoxes">
+                                @{
+                                    var engineIndex = 0;
+                                    foreach (var engineVolume in Model.CompleteCarModel.EngineVolumes)
+                                    {
+                                        <input class="form-check-input" type="radio" value="@engineVolume" id="engineCheck @engineIndex" asp-for="@Model.Order.EngineVolume" />
+                                        <span asp-validation-for="@Model.Order.EngineVolume" class="text-danger"></span>
+                                        <label class="form-check-label" for="engineCheck @engineIndex">
+                                            @engineVolume
+                                        </label>
+                                        engineIndex++;
+                                    }
+                                }
+                            </div>
+                            <label class="form-label mt-2" for="lightCheckBoxes">Світло</label>
+                            <div id="lightCheckBoxes">
+                                @{
+                                    var lightIndex = 0;
+                                    foreach (var light in Model.CompleteCarModel.LightTypes)
+                                    {
+                                        <input class="form-check-input" type="radio" value="@light" id="lightCheck @lightIndex" asp-for="@Model.Order.Light" />
+                                        <span asp-validation-for="@Model.Order.Light" class="text-danger"></span>
+                                        <label class="form-check-label" for="lightCheck @lightIndex">
+                                            @light
+                                        </label>
+                                        lightIndex++;
+                                    }
+                                }
+                            </div>
+                            <label class="form-label mt-2" for="gearBoxes">Коробка</label>
+                            <div id="gearBoxes">
+                                @{
+                                    var gearboxIndex = 0;
+                                    foreach (var gearbox in Model.CompleteCarModel.AvailableGearBoxes)
+                                    {
+                                        <input class="form-check-input" type="radio" value="@gearbox" id="lightCheck @lightIndex" asp-for="@Model.Order.GearBox" />
+                                        <span asp-validation-for="@Model.Order.GearBox" class="text-danger"></span>
+                                        <label class="form-check-label" for="lightCheck @gearboxIndex">
+                                            @gearbox
+                                        </label>
+                                        gearboxIndex++;
+                                    }
+                                }
+                            </div>
+                            <label class="form-label mt-2" for="paymentSelect">Спосіб оплати</label>
+                            <select class="form-select" aria-label="paymentSelect" id="paymentSelect" asp-for="@Model.Order.PaymentType">
+                                <option value="Credit">Кредит</option>
+                                <option value="AllCashValue">Сплата готівкою</option>
+                                <option value="AllCardValue">Сплата карткою</option>
+                                <option value="HalfCardHalfCash">Сплата карткою та готівкою</option>
+                            </select>
+                            <label for="colorInput" class="form-label">Колір авто</label>
+                            <input type="color" class="form-control form-control-color" id="colorInput" value="@Model.Order.Color" title="Колір" asp-for="@Model.Order.Color">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-12">
+                    <button class="btn btn-primary w-100"
+                            type="submit" form="updateOrderForm" id="updateOffer"
+                            asp-page="AdminOrderPage"
+                            asp-page-handler="UpdateOrder">
+                        Оновити дані
+                    </button>
+                </div>
+                <div class="col-12">
+                    <button type="button" class="btn btn-danger w-100" data-bs-dismiss="modal" aria-label="Close">Скасувати</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*@{
+    if (Model.InvalidValues.Count > 0)
+    {
+        <div class="modal fade border border-danger" id="updateOrder" tabindex="-1" aria-labelledby="updateOfferLabel" aria-hidden="true">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger" id="Update Offer">Помилка оновлення</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid border border-dark">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="container">
+                                    <p>
+                                        Оновлення скасовано через помилки в таких даних:
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        @foreach(var faultedItem in Model.InvalidValues)
+                        {
+                            <div class="row">
+                                <div class="col-4">
+                                    @faultedItem.RawValue
+                                </div>
+                                <div class="col-8">
+                                    @faultedItem.AttemptedValue
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <form method="post">
+                                <button class="btn btn-info" type="submit"
+                                        asp-page="AdminOrderPage"
+                                        asp-route-savedId="@ViewData["SavedId"]">
+                                    Зрозуміло
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}*@
